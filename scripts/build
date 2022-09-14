@@ -1,0 +1,4 @@
+#!/bin/bash
+cd $(dirname $0)
+cd ..
+docker build -f ./package/Dockerfile -t {YOUR_DOCKERHUB_REPO_HERE}/plugin-server:v0 --push .
