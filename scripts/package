@@ -1,0 +1,19 @@
+#!/bin/bash
+cd $(dirname $0)
+cd ..
+
+#Clone plugin-server repo
+
+#Move files in from package.json filepath
+
+#Build Docker image with plugin files
+
+#Edit Chart information to match plugin using yq and jq
+CHARTNAME=$(cat $1 | jq ".name")
+CHARTVERSION=$(cat $1 | jq ".version")
+
+echo $CHARTNAME
+echo $CHARTVERSION
+
+yq -i '.name = '$CHARTNAME charts/Chart.yaml
+yq -i '.version = '$CHARTVERSION charts/Chart.yaml
