@@ -1,0 +1,18 @@
+#!/bin/bash
+cd $(dirname $0)
+
+#Get chart directory from input
+CHARTDIR=$1
+
+#Get plugin info from package.jsonm using jq
+echo "Grabbing plugin info from $2"
+CHARTNAME=$(cat $2 | jq ".name" | tr -d '"')
+CHARTVERSION=$(cat $2 | jq ".version" | tr -d '"')
+
+#Edit Chart information to match plugin using yq
+yq -i ".name = \"${CHARTNAME}\"" $CHARTDIR/charts/Chart.yaml
+yq -i ".version = \"${CHARTVERSION}\"" $CHARTDIR/charts/Chart.yaml
+yq -i ".image.tag = \"v${CHARTVERSION}\"" $CHARTDIR/charts/values.yaml
+yq -i ".plugin.version = \"v${CHARTVERSION}\"" $CHARTDIR/charts/values.yaml
+yq -i ".image.repository = \"eliyamlevy/${CHARTNAME}\"" $CHARTDIR/charts/values.yaml
+yq -i ".global.cattle.systemDefaultRegistry = \"${3}\"" $CHARTDIR/charts/values.yaml
