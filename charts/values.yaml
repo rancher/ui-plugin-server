@@ -38,6 +38,10 @@ pluginServer:
 
   affinity: {}
 
+plugin:
+  version: 0.0.1
+  noCache: false
+
 global:
   cattle:
     systemDefaultRegistry: ""
