@@ -8,11 +8,13 @@ CHARTDIR=$1
 echo "Grabbing plugin info from $2"
 CHARTNAME=$(cat $2 | jq ".name" | tr -d '"')
 CHARTVERSION=$(cat $2 | jq ".version" | tr -d '"')
+IMAGEREPO=$3
 
 #Edit Chart information to match plugin using yq
-yq -i ".name = \"${CHARTNAME}\"" $CHARTDIR/charts/Chart.yaml
-yq -i ".version = \"${CHARTVERSION}\"" $CHARTDIR/charts/Chart.yaml
-yq -i ".image.tag = \"v${CHARTVERSION}\"" $CHARTDIR/charts/values.yaml
-yq -i ".plugin.version = \"v${CHARTVERSION}\"" $CHARTDIR/charts/values.yaml
-yq -i ".image.repository = \"eliyamlevy/${CHARTNAME}\"" $CHARTDIR/charts/values.yaml
-yq -i ".global.cattle.systemDefaultRegistry = \"${3}\"" $CHARTDIR/charts/values.yaml
+yq -i eval ".name = \"${CHARTNAME}\"" $CHARTDIR/Chart.yaml
+yq -i eval ".version = \"${CHARTVERSION}\"" $CHARTDIR/Chart.yaml
+yq -i eval ".appVersion = \"${CHARTVERSION}\"" $CHARTDIR/Chart.yaml
+yq -i eval ".image.tag = \"${CHARTVERSION}\"" $CHARTDIR/values.yaml
+yq -i eval ".plugin.version = \"${CHARTVERSION}\"" $CHARTDIR/values.yaml
+yq -i eval ".image.repository = \"${IMAGEREPO}/${CHARTNAME}\"" $CHARTDIR/values.yaml
+yq -i eval ".global.cattle.systemDefaultRegistry = \"${IMAGEREPO}\"" $CHARTDIR/values.yaml
