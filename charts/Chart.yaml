@@ -7,7 +7,6 @@ annotations:
   # catalog.cattle.io/rancher-version: '>= 2.7.0-0 < 2.8.0-0'
   # catalog.cattle.io/kube-version: '>= 1.16.0-0 < 1.25.0-0'
   catalog.cattle.io/scope: management
-  catalog.cattle.io/type: cluster-tool
 apiVersion: v1
 appVersion: "1.16.0"
 description: A base Plugin Server Chart for adding plugins to Rancher
