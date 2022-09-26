@@ -45,7 +45,7 @@ spec:
           volumeMounts:
           - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
             readOnly: true
-            name: nginx-conf
+            name: {{ .Chart.Name }}-nginx-conf
           # livenessProbe:
           #   httpGet:
           #     path: /
