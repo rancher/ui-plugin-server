@@ -1,47 +1,34 @@
 # Default values for sample.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-
 replicaCount: 1
-
 image:
-  repository: yourrepohere/plugin-server
+  repository: rancher/homepage
   pullPolicy: Always
   # Overrides the image tag whose default is the chart appVersion.
-  tag: "v0"
-
+  tag: "0.1.0"
 imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-
 service:
   type: ClusterIP
   port: 80
   targetPort: 8080
-
 pluginServer:
   autoscaling:
     enabled: false
     minReplicas: 1
     maxReplicas: 100
     targetCPUUtilizationPercentage: 80
-
   replicas: 1
-
   resources: {}
-
   securityContext: {}
-
   nodeSelector: {}
-
   tolerations: []
-
   affinity: {}
-
 plugin:
   version: 0.0.1
   noCache: false
-
 global:
   cattle:
     systemDefaultRegistry: ""
@@ -59,6 +46,5 @@ global:
     #   create: true
     #   ## Aggregate default user ClusterRoles into default k8s ClusterRoles
     #   aggregateToDefaultRoles: true
-
-    # pspEnabled: true
-    # pspAnnotations: {}
+# pspEnabled: true
+# pspAnnotations: {}
