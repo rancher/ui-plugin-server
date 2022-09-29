@@ -1,13 +1,47 @@
-# Plugin Server Base Chart
-This chart serves as a base for developing plugins for the Rancher UI. It contains all the templates for deploying a fileserver to server plugin related files and is designed to be integrated with the Rancher Plugin controller. To use this base chart for your plugin a few edits need to be made.
+UI Plugin Server
+========
 
-## Building the Plugin Server Image
-First start by copying the files you wish to serve into the `/plugin` directory. Any file in this directory will be packaged on to the docker image being used for the plugin server. Once the files are there, you can build the image using `package/Dockerfile` as your dockerfile and then make sure to push the image to a Docker Repository and tag it. This repository will be used in the chart's `values.yaml`.
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
-## Updating the Chart
-You will want to change certain values in `charts/values.yaml` and `charts/Chart.yaml` in order to deploy this to a cluster. In `charts/values.yaml`, make sure to update the repository and tag values. In `charts/Chart.yaml`, make sure to update the chart's name and description to match your plugin. 
+This repository serves as a base for developing plugins for the Rancher UI.
 
-## Deployment
-After these edits all that's left is to deploy the chart through the method of your choice.
-Example install command:
-`helm upgrade --install test-plugin ./charts --namespace cattle-ui-plugin-system --create-namespace`
+It contains a [Dockerfile](./package/Dockerfile) that packages the contents of the [`plugin/`](./plugin) directory into a Docker image that serves up the contents of the `plugin/` directory and an auto-generated `files.txt` via a simple [nginx](https://nginx.org) server.
+
+**This meets the expectations of a UI Plugin Server that can be integrated with Rancher's [UI Plugin Operator](https://github.com/rancher/ui-plugin-operator).** You can build this image by running the `make` command.
+
+It also contains a [Helm chart](https://github.com/helm/helm) that can be used to deploy this image. 
+
+A simple utility script located at [`scripts/patch`](./scripts/patch) that can be run by calling `make patch` allows a user to modify this Helm chart according to the plugin that you seek to build.
+
+## Developing
+
+### How do I create my own Rancher plugin?
+
+To develop your own plugin, you will need to modify the Docker image and Helm chart in this repository.
+
+Please read the [Getting Started guide](./docs/gettingstarted.md) for a more detailed explanation of how to do so!
+
+For an example of how to create a repository that hosts multiple plugins and simply copies over the Helm chart from this repository with some changes on an install, see [`scripts/publish` in `rancher/ui-plugins-example`](https://github.com/rancher/ui-plugin-examples/blob/main/scripts/publish).
+
+## Building
+
+`make`
+
+## Running
+
+`helm upgrade --install -n cattle-ui-plugin-system <your-plugin> ./charts/ui-plugin-server`
+
+## License
+Copyright (c) 2022 [Rancher Labs, Inc.](http://rancher.com)
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+[http://www.apache.org/licenses/LICENSE-2.0](http://www.apache.org/licenses/LICENSE-2.0)
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
