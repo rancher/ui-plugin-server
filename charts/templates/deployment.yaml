@@ -60,9 +60,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: nginx-conf
+        - name: {{ .Chart.Name }}-nginx-conf
           configMap:
-            name: nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
+            name: {{ .Chart.Name }}-nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
             items:
               - key: nginx.conf
                 path: nginx.conf
