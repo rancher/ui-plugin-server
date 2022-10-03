@@ -5,9 +5,7 @@ metadata:
   labels:
     {{- include "plugin-server.labels" . | nindent 4 }}
 spec:
-  {{- if not .Values.pluginServer.autoscaling.enabled }}
   replicas: {{ .Values.pluginServer.replicas }}
-  {{- end }}
   selector:
     matchLabels:
       {{- include "plugin-server.selectorLabels" . | nindent 6 }}
