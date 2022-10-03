@@ -85,5 +85,5 @@ if [[ -n "${HOME}" ]]; then
 fi
 
 yq -i eval ".global.cattle.systemDefaultRegistry = \"${REGISTRY}\"" $CHART/values.yaml
-yq -i eval ".image.repository = \"${ORG}/${REPO}\"" $CHART/values.yaml
-yq -i eval ".image.tag = \"${TAG}\"" $CHART/values.yaml
+yq -i eval ".pluginServer.image.repository = \"${ORG}/${REPO}\"" $CHART/values.yaml
+yq -i eval ".pluginServer.image.tag = \"${TAG}\"" $CHART/values.yaml

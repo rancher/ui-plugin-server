@@ -5,10 +5,10 @@ metadata:
   labels:
     {{- include "plugin-server.labels" . | nindent 4 }}
 spec:
-  type: {{ .Values.service.type }}
+  type: {{ .Values.pluginServer.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      targetPort: {{ .Values.service.targetPort }}
+    - port: {{ .Values.pluginServer.service.port }}
+      targetPort: {{ .Values.pluginServer.service.targetPort }}
       protocol: TCP
       name: http
   selector:

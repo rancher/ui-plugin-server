@@ -8,20 +8,21 @@ global:
     repository: rancher/kubectl
     tag: v1.20.2
     pullPolicy: IfNotPresent
-image:
-  repository: rancher/ui-plugin-server
-  pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "0.1.0"
-imagePullSecrets: []
+  imagePullSecrets: []
 nameOverride: ""
 fullnameOverride: ""
-service:
-  type: ClusterIP
-  port: 80
-  targetPort: 8080
 pluginServer:
-  replicas: 1
+  image:
+    repository: rancher/ui-plugin-server
+    pullPolicy: Always
+    # Overrides the image tag whose default is the chart appVersion.
+    tag: "0.1.0"
+  service:
+    type: ClusterIP
+    port: 80
+    targetPort: 8080
+  deployment:
+    replicas: 1
   resources: {}
   securityContext: {}
   nodeSelector: {}
