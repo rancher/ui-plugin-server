@@ -36,30 +36,30 @@ if [[ -z ${ORG} ]]; then
     ORG=rancher
 fi
 
-if [[ -z ${PACKAGE_JSON} ]] && [[ -f plugin/package.json ]]; then
+if [[ -z ${PACKAGE_JSON} ]]; then
     PACKAGE_JSON=plugin/package.json
 fi
 
-if [[ -n ${PACKAGE_JSON} ]]; then
-    if ! [[ -f ${PACKAGE_JSON} ]]; then
-        echo "Could not find package.json at path ${PACKAGE_JSON}"
-        exit 1
-    fi
-    if [[ -z ${REPO} ]]; then
-        REPO=$(cat ${PACKAGE_JSON} | jq ".name" | tr -d '"')
-    fi
-    if [[ -z ${TAG} ]]; then
-        TAG=$(cat ${PACKAGE_JSON} | jq ".version" | tr -d '"')
-    fi
-
-    DESCRIPTION=$(cat ${PACKAGE_JSON} | jq ".description" | tr -d '"')
-    ICON=$(cat ${PACKAGE_JSON} | jq ".icon" | tr -d '"')
-    KEYWORDS=$(cat ${PACKAGE_JSON} | jq ".keywords")
-    HOME=$(cat ${PACKAGE_JSON} | jq ".homepage" | tr -d '"')
+if ! [[ -f ${PACKAGE_JSON} ]]; then
+    echo "Could not find package.json at path ${PACKAGE_JSON}"
+    exit 1
 fi
 
+if [[ -z ${REPO} ]]; then
+    REPO=$(cat ${PACKAGE_JSON} | jq ".name" | tr -d '"')
+fi
+
+if [[ -z ${TAG} ]]; then
+    TAG=$(cat ${PACKAGE_JSON} | jq ".version" | tr -d '"')
+fi
+
+DESCRIPTION=$(cat ${PACKAGE_JSON} | jq ".description" | tr -d '"')
+ICON=$(cat ${PACKAGE_JSON} | jq ".icon" | tr -d '"')
+KEYWORDS=$(cat ${PACKAGE_JSON} | jq ".keywords")
+HOME=$(cat ${PACKAGE_JSON} | jq ".homepage" | tr -d '"')
+
 if [[ -z ${ORG} ]] || [[ -z ${REPO} ]] || [[ -z ${TAG} ]]; then
-    echo "Usage: [CHART=] [REGISTRY=] [ORG=rancher] PACKAGE_JSON=<package-json-path> REPO=<repo> TAG=<tag> ./scripts/patch <chart>"
+    echo "Usage: [CHART=charts/ui-plugin-server] [REGISTRY=""] [ORG=rancher] [REPO=<override-repo>] [TAG=<override-tag>] [PACKAGE_JSON=plugin/package.json] ./scripts/patch <chart>"
     exit 1
 fi
 

@@ -8,6 +8,10 @@ By default, this repository will package the contents of the `plugin/` directory
 
 Therefore, once you add your custom plugin logic (i.e. your Javascript code, static assets, etc.) to this repository, you will just need to ensure that the final generated assets are placed into the `plugin/` directory so that they can be served.
 
+> **Note:** The contents of the `plugin/` directory is expected to be an [npm package](https://docs.npmjs.com/about-packages-and-modules#about-packages), which means that it should contain a file that describes the plugin at `plugin/package.json`.
+>
+> **The Docker image will fail to build if `plugin/package.json` is not found.**
+
 Once the plugin directory contains the contents you would like to serve, simply run `ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 make` to build your `rancher/ui-plugin-server:v0.0.0` image (or replace the environment variables accordingly based on what image you would like to build).
 
 Once you have built your image, you can run the following Docker command to serve your plugin at `http://localhost:8080`:

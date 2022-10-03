@@ -1,6 +1,6 @@
 FROM registry.suse.com/bci/bci-base:15.4
 
-RUN zypper -n install nginx
+RUN zypper -n install nginx jq
 
 COPY package/nginx.conf /etc/nginx/nginx.conf
 
@@ -20,6 +20,11 @@ WORKDIR /home/plugin-server/plugin-contents
 
 # Copy in plugin files and generate files.txt statically
 COPY plugin plugin
+
+# Must be an npm package to get version from to populate version.txt
+RUN if ! [[ -f "plugin/package.json" ]]; then echo "ERROR: Could not find package.json in plugin directory" && exit 1; fi
+RUN jq ".version" plugin/package.json | tr -d '"' > version.txt
+
 RUN find plugin -type f > files.txt
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]

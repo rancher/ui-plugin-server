@@ -7,6 +7,8 @@ This repository serves as a base for developing plugins for the Rancher UI.
 
 It contains a [Dockerfile](./package/Dockerfile) that packages the contents of the [`plugin/`](./plugin) directory into a Docker image that serves up the contents of the `plugin/` directory and an auto-generated `files.txt` via a simple [nginx](https://nginx.org) server.
 
+> **Note:** The contents of the `plugin/` directory is expected to be an [npm package](https://docs.npmjs.com/about-packages-and-modules#about-packages), which means that it should contain a file that describes the plugin at `plugin/package.json`.
+
 **This meets the expectations of a UI Plugin Server that can be integrated with Rancher's [UI Plugin Operator](https://github.com/rancher/ui-plugin-operator).** You can build this image by running the `make` command.
 
 It also contains a [Helm chart](https://github.com/helm/helm) that can be used to deploy this image. 
