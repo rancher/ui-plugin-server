@@ -8,13 +8,25 @@ By default, this repository will package the contents of the `plugin/` directory
 
 Therefore, once you add your custom plugin logic (i.e. your Javascript code, static assets, etc.) to this repository, you will just need to ensure that the final generated assets are placed into the `plugin/` directory so that they can be served.
 
-Once the plugin directory contains the contents you would like to serve, simply run `ORG=rancher REPO=ui-plugin-operator TAG=v0.0.0 make` to build your `rancher/ui-plugin-operator:v0.0.0` image (or replace the environment variables accordingly based on what image you would like to build).
+Once the plugin directory contains the contents you would like to serve, simply run `ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 make` to build your `rancher/ui-plugin-server:v0.0.0` image (or replace the environment variables accordingly based on what image you would like to build).
 
-Finally, run `REGISTRY= ORG=rancher REPO=ui-plugin-operator TAG=v0.0.0 docker push ${REGISTRY}${ORG}/${REPO}:${TAG}` to push your built image to a Docker registry of your choice (where `REGISTRY` would be your private Docker registry, if that is something that you are using. By default, the registry chosen by Docker when no registry is provided is the public [DockerHub](https://hub.docker.com/)).
+Once you have built your image, you can run the following Docker command to serve your plugin at `http://localhost:8080`:
+
+```bash
+ORG=rancher
+REPO=ui-plugin-server
+TAG=v0.0.0
+
+docker run -it --rm -p 8080:8080 ${ORG}/${REPO}:${TAG}
+```
+
+Once you have finished testing your changes, run `REGISTRY= ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 docker push ${REGISTRY}${ORG}/${REPO}:${TAG}` to push your built image to a Docker registry of your choice (where `REGISTRY` would be your private Docker registry, if that is something that you are using. 
+
+By default, the registry chosen by Docker when no registry is provided is the public [DockerHub](https://hub.docker.com/)).
 
 ## Customizing Your Helm Chart
 
-Once your image has been pushed to a Docker registry, you can use the utility script at `./scripts/patch` by running the command `REGISTRY= ORG=rancher REPO=ui-plugin-operator TAG=v0.0.0 make patch` to modify the Helm chart's `Chart.yaml` and `values.yaml` according to your specific plugin server's requirements.
+Once your image has been pushed to a Docker registry, you can use the utility script at `./scripts/patch` by running the command `REGISTRY= ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 make patch` to modify the Helm chart's `Chart.yaml` and `values.yaml` according to your specific plugin server's requirements.
 
 In addition to using this script, you may also want to make the following changes to the Helm chart:
 
@@ -53,7 +65,7 @@ In addition to using this script, you may also want to make the following change
 ### In your local / management Kubernetes cluster (via running Helm 3 locally)
 
 ```bash
-REPO=ui-plugin-operator
+REPO=ui-plugin-server
 
 PLUGIN_RELASE_NAME=${REPO}
 helm upgrade --install --create-namespace -n cattle-ui-plugin-system ${PLUGIN_NAME} ./charts/ui-plugin-server
