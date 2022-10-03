@@ -10,14 +10,12 @@ spec:
   template:
     metadata:
       {{- with .Values.podAnnotations }}
-      annotations:
-        {{- toYaml . | nindent 8 }}
+      annotations: {{ toYaml . | nindent 8 }}
       {{- end }}
       labels: {{ include "plugin-server.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.global.imagePullSecrets }}
-      imagePullSecrets:
-        {{- toYaml . | nindent 8 }}
+      imagePullSecrets: {{ toYaml . | nindent 8 }}
       {{- end }}
       nodeSelector: {{ include "linux-node-selector" . | nindent 8 }}
 {{- if .Values.nodeSelector }}
@@ -29,8 +27,7 @@ spec:
 {{- end }}
       containers:
         - name: {{ include "plugin-server.fullname" . }}
-          securityContext:
-            {{- toYaml .Values.pluginServer.securityContext | nindent 12 }}
+          securityContext: {{ toYaml .Values.pluginServer.securityContext | nindent 12 }}
           image: "{{ .Values.pluginServer.image.repository }}:{{ .Values.pluginServer.image.tag | default .Chart.AppVersion }}"
           imagePullPolicy: {{ .Values.pluginServer.image.pullPolicy }}
           ports:
@@ -50,8 +47,7 @@ spec:
               periodSeconds: 5
           resources:
       {{- with .Values.pluginServer.affinity }}
-      affinity:
-        {{- toYaml . | nindent 8 }}
+      affinity: {{ toYaml . | nindent 8 }}
       {{- end }}
       volumes:
         - name: {{ include "plugin-server.fullname" . }}-nginx-conf
