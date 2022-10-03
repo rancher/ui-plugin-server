@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{ .Chart.Name }}
+  name: {{ include "plugin-server.fullname" . }}
   labels:
     {{- include "plugin-server.labels" . | nindent 4 }}
 spec:
@@ -31,7 +31,7 @@ spec:
 {{ toYaml .Values.tolerations | indent 8 }}
 {{- end }}
       containers:
-        - name: {{ .Chart.Name }}
+        - name: {{ include "plugin-server.fullname" . }}
           securityContext:
             {{- toYaml .Values.pluginServer.securityContext | nindent 12 }}
           image: "{{ .Values.pluginServer.image.repository }}:{{ .Values.pluginServer.image.tag | default .Chart.AppVersion }}"
@@ -43,7 +43,7 @@ spec:
           volumeMounts:
           - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
             readOnly: true
-            name: {{ .Chart.Name }}-nginx-conf
+            name: {{ include "plugin-server.fullname" . }}-nginx-conf
           # livenessProbe:
           #   httpGet:
           #     path: /
@@ -58,9 +58,9 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       volumes:
-        - name: {{ .Chart.Name }}-nginx-conf
+        - name: {{ include "plugin-server.fullname" . }}-nginx-conf
           configMap:
-            name: {{ .Chart.Name }}-nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
+            name: {{ include "plugin-server.fullname" . }}-nginx-conf # place ConfigMap `nginx-conf` on /etc/nginx
             items:
               - key: nginx.conf
                 path: nginx.conf
