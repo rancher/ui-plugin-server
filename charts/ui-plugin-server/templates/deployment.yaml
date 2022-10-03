@@ -2,8 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: {{ include "plugin-server.fullname" . }}
-  labels:
-    {{- include "plugin-server.labels" . | nindent 4 }}
+  labels: {{ include "plugin-server.labels" . | nindent 4 }}
 spec:
   replicas: {{ .Values.pluginServer.deployment.replicas }}
   selector:
@@ -15,8 +14,7 @@ spec:
       annotations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      labels:
-        {{- include "plugin-server.selectorLabels" . | nindent 8 }}
+      labels: {{ include "plugin-server.selectorLabels" . | nindent 8 }}
     spec:
       {{- with .Values.global.imagePullSecrets }}
       imagePullSecrets:
