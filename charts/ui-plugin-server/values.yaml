@@ -1,6 +1,13 @@
 # Default values for sample.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+global:
+  cattle:
+    systemDefaultRegistry: ""
+  kubectl:
+    repository: rancher/kubectl
+    tag: v1.20.2
+    pullPolicy: IfNotPresent
 image:
   repository: rancher/ui-plugin-server
   pullPolicy: Always
@@ -23,10 +30,4 @@ pluginServer:
 plugin:
   version: 0.0.1
   noCache: false
-global:
-  cattle:
-    systemDefaultRegistry: ""
-  kubectl:
-    repository: rancher/kubectl
-    tag: v1.20.2
-    pullPolicy: IfNotPresent
+
