@@ -6,8 +6,7 @@ metadata:
 spec:
   replicas: {{ .Values.pluginServer.deployment.replicas }}
   selector:
-    matchLabels:
-      {{- include "plugin-server.selectorLabels" . | nindent 6 }}
+    matchLabels: {{ include "plugin-server.selectorLabels" . | nindent 6 }}
   template:
     metadata:
       {{- with .Values.podAnnotations }}

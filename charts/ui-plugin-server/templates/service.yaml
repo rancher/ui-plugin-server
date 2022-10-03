@@ -10,5 +10,4 @@ spec:
       targetPort: {{ .Values.pluginServer.service.targetPort }}
       protocol: TCP
       name: http
-  selector:
-    {{- include "plugin-server.selectorLabels" . | nindent 4 }}
+  selector: {{ include "plugin-server.selectorLabels" . | nindent 4 }}
