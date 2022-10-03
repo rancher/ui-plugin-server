@@ -1,0 +1,76 @@
+#!/bin/bash
+set -e
+
+source $(dirname $0)/version
+
+cd $(dirname $0)/..
+
+if [[ -z ${ORG} ]]; then
+    ORG=rancher
+fi
+
+if [[ -z ${REPO} ]]; then
+   REPO=ui-plugin-server
+fi
+
+if [[ -z ${TAG} ]]; then
+    TAG=v0.0.0
+fi
+
+TEST_DIR=$(mktemp -d)
+
+# Run Docker container with image
+echo "Deploying test docker image..."
+if [[ -f /.dockerenv ]]; then
+    # Script is being run from within a container (i.e. make test); bind the test container to the same network
+    BUILD_CONTAINER_NAME=$(docker inspect --format='{{.Name}}' ${HOSTNAME})
+    docker run -d --rm --net=container:${BUILD_CONTAINER_NAME} --name=ui-plugin-server-test-ci ${ORG}/${REPO}:${TAG} 2>&1 1>/dev/null
+else
+    # Script is being run locally (i.e. ./scripts/test); bind to local network
+    docker run -d --rm -p 8080:8080 --name=ui-plugin-server-test-ci ${ORG}/${REPO}:${TAG} 2>&1 1>/dev/null
+fi
+
+cleanup() {
+    set +e # don't stop cleanup on a failure
+    [[ -d "${TEST_DIR}" ]] && echo "Cleaning up temporary directory created for testing at path ${TEST_DIR}..." && rm -rf ${TEST_DIR}
+    echo "Cleaning up docker container..."
+    docker stop ui-plugin-server-test-ci 2>&1 1>/dev/null
+}
+
+# Ensure that cleanup is called even if there's a failure in the rest of this script
+trap 'cleanup' EXIT
+
+# Create temporary directory for expected generated values
+jq ".version" plugin/package.json | tr -d '"' > ${TEST_DIR}/expected_version.txt
+find plugin -type f | sort > ${TEST_DIR}/expected_files.txt
+
+PLUGIN_SERVER_ENDPOINT=http://localhost:8080
+
+# Wait for 5 seconds for the nginx server to come up
+total_num_retries=5
+num_retries=0
+until curl ${PLUGIN_SERVER_ENDPOINT} 2>/dev/null 1>/dev/null; do
+    if [[ "${num_retries}" == "${total_num_retries}" ]]; then
+        echo "Found no response at plugin server endpoint after ${total_num_retries} retries"
+        exit 1
+    fi
+    num_retries=$((num_retries+1))
+    sleep 1
+done;
+
+echo "Running tests..."
+
+# Verify contents of files.txt
+if ! curl -sfL ${PLUGIN_SERVER_ENDPOINT}/files.txt | diff -uN ${TEST_DIR}/expected_files.txt -; then
+    echo "ERROR: files.txt did not match expected_files.txt"
+    exit 1
+fi
+
+# Verify contents of version.txt
+if ! curl -sfL ${PLUGIN_SERVER_ENDPOINT}/version.txt | diff -uN ${TEST_DIR}/expected_version.txt -; then
+    echo "ERROR: version.txt did not match expected_version.txt"
+    exit 1
+fi
+
+echo "PASS: Successfully completed tests!"
+exit 0
