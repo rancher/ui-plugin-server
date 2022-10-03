@@ -41,14 +41,13 @@ spec:
           - mountPath: /etc/nginx # mount nginx-conf volumn to /etc/nginx
             readOnly: true
             name: {{ include "plugin-server.fullname" . }}-nginx-conf
-          # livenessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
-          # readinessProbe:
-          #   httpGet:
-          #     path: /
-          #     port: http
+          readinessProbe:
+            httpGet:
+              scheme: http
+              path: /
+              port: http
+              initialDelaySeconds: 10
+              periodSeconds: 5
           resources:
       {{- with .Values.pluginServer.affinity }}
       affinity:
