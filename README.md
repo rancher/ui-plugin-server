@@ -29,7 +29,7 @@ For an example of how to create a repository that hosts multiple plugins and sim
 
 ## Running
 
-`helm upgrade --install -n cattle-ui-plugin-system <your-plugin> ./charts/ui-plugin-server`
+`helm upgrade --install --create-namespace -n cattle-ui-plugin-system <your-plugin> ./charts/ui-plugin-server`
 
 ## License
 Copyright (c) 2022 [Rancher Labs, Inc.](http://rancher.com)

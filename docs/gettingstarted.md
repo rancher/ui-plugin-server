@@ -56,7 +56,7 @@ In addition to using this script, you may also want to make the following change
 REPO=ui-plugin-operator
 
 PLUGIN_RELASE_NAME=${REPO}
-helm upgrade --install -n cattle-ui-plugin-system ${PLUGIN_NAME} ./charts/ui-plugin-server
+helm upgrade --install --create-namespace -n cattle-ui-plugin-system ${PLUGIN_NAME} ./charts/ui-plugin-server
 ```
 
 ## Creating a Plugin Repository
