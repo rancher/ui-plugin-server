@@ -9,8 +9,6 @@
 .dapper
 
 # Directories
-/bin
-/dist
 .vscode
 .idea
 
