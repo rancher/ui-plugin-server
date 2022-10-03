@@ -25,6 +25,6 @@ COPY plugin plugin
 RUN if ! [[ -f "plugin/package.json" ]]; then echo "ERROR: Could not find package.json in plugin directory" && exit 1; fi
 RUN jq ".version" plugin/package.json | tr -d '"' > version.txt
 
-RUN find plugin -type f > files.txt
+RUN find plugin -type f | sort > files.txt
 
 ENTRYPOINT ["nginx", "-g", "daemon off;"]
