@@ -29,6 +29,5 @@ pluginServer:
   tolerations: []
   affinity: {}
 plugin:
-  version: 0.0.1
+  versionOverride: ""
   noCache: false
-
