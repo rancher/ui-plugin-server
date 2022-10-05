@@ -69,19 +69,35 @@ yq -i eval ".appVersion = \"${TAG}\"" $CHART/Chart.yaml
 yq -i eval ".version = \"${TAG}\"" $CHART/Chart.yaml
 
 if [[ -n "${DESCRIPTION}" ]]; then
-    yq -i eval ".description = \"${DESCRIPTION}\"" $CHART/Chart.yaml
+    if [[ "${DESCRIPTION}" == "null" ]]; then
+        yq -i eval "del(.description)" $CHART/Chart.yaml
+    else
+        yq -i eval ".description = \"${DESCRIPTION}\"" $CHART/Chart.yaml
+    fi
 fi
 
 if [[ -n "${ICON}" ]]; then
-    yq -i eval ".icon = \"${ICON}\"" $CHART/Chart.yaml
+    if [[ "${ICON}" == "null" ]]; then
+        yq -i eval "del(.icon)" $CHART/Chart.yaml
+    else
+        yq -i eval ".icon = \"${ICON}\"" $CHART/Chart.yaml
+    fi
 fi
 
 if [[ -n "${KEYWORDS}" ]]; then
-    yq -i -I2 eval ".keywords = ${KEYWORDS}" $CHART/Chart.yaml
+    if [[ "${KEYWORDS}" == "null" ]]; then
+        yq -i eval "del(.keywords)" $CHART/Chart.yaml
+    else
+        yq -i -I2 eval ".keywords = ${KEYWORDS}" $CHART/Chart.yaml
+    fi
 fi
 
 if [[ -n "${HOME}" ]]; then
-    yq -i eval ".home = \"${HOME}\"" $CHART/Chart.yaml
+    if [[ "${HOME}" == "null" ]]; then
+        yq -i eval "del(.home)" $CHART/Chart.yaml
+    else
+        yq -i eval ".home = \"${HOME}\"" $CHART/Chart.yaml
+    fi
 fi
 
 yq -i eval ".global.cattle.systemDefaultRegistry = \"${REGISTRY}\"" $CHART/values.yaml
