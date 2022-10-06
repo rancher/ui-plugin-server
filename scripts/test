@@ -41,7 +41,6 @@ cleanup() {
 trap 'cleanup' EXIT
 
 # Create temporary directory for expected generated values
-jq ".version" plugin/package.json | tr -d '"' > ${TEST_DIR}/expected_version.txt
 find plugin -type f | sort > ${TEST_DIR}/expected_files.txt
 
 PLUGIN_SERVER_ENDPOINT=http://localhost:8080
@@ -66,11 +65,6 @@ if ! curl -sfL ${PLUGIN_SERVER_ENDPOINT}/files.txt | diff -uN ${TEST_DIR}/expect
     exit 1
 fi
 
-# Verify contents of version.txt
-if ! curl -sfL ${PLUGIN_SERVER_ENDPOINT}/version.txt | diff -uN ${TEST_DIR}/expected_version.txt -; then
-    echo "ERROR: version.txt did not match expected_version.txt"
-    exit 1
-fi
 
 echo "PASS: Successfully completed tests!"
 exit 0
