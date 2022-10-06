@@ -1,0 +1,12 @@
+{
+  "name": "ui-plugin-server",
+  "version": "0.1.0",
+  "description": "homepage plugin",
+  "icon": "https://docs.ranchermanager.rancher.io/img/rancher-logo-horiz-color.svg",
+  "keywords": [
+    "applications",
+    "infrastructure",
+    "example"
+  ],
+  "homepage": "https://rancher.com"
+}
