@@ -12,7 +12,7 @@ Therefore, once you add your custom plugin logic (i.e. your Javascript code, sta
 >
 > **The Docker image will fail to build if `plugin/package.json` is not found.**
 
-Once the plugin directory contains the contents you would like to serve, simply run `ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 make` to build your `rancher/ui-plugin-server:v0.0.0` image (or replace the environment variables accordingly based on what image you would like to build).
+Once the plugin directory contains the contents you would like to serve, simply run `REGISTRY= ORG=rancher REPO=ui-plugin-server TAG=v0.0.0 make` to build your `rancher/ui-plugin-server:v0.0.0` image (or replace the environment variables accordingly based on what image you would like to build).
 
 Once you have built your image, you can run the following Docker command to serve your plugin at `http://localhost:8080`:
 
