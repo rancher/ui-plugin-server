@@ -65,4 +65,4 @@ jobs:
       -
         name: Run helm install --dry-run
         run: |
-          helm install --dry-run -n cattle-ui-plugin-system ui-plugin-server --set pluginServer.image.tag=dev ./charts/ui-plugin-server/
+          helm install --dry-run -n cattle-ui-plugin-system ui-plugin-server --set pluginServer.image.tag=dev --set plugin.enabled=false ./charts/ui-plugin-server/
