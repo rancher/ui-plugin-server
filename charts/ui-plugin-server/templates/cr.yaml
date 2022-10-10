@@ -1,3 +1,4 @@
+{{- if .Values.plugin.enabled }}
 apiVersion: catalog.cattle.io/v1
 kind: UIPlugin
 metadata:
@@ -10,3 +11,4 @@ spec:
     version: {{ (semver (default .Chart.AppVersion .Values.plugin.versionOverride)).Original }}
     endpoint: http://{{ include "plugin-server.fullname" . }}.{{ .Release.Namespace }}.svc
     noCache: {{ .Values.plugin.noCache }}
+{{- end }}
