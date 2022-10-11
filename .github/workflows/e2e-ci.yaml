@@ -46,7 +46,7 @@ jobs:
         with:
           cluster-name: "k3s-default"
           args: >-
-            --agents 3
+            --agents 1
             --network "nw01"
             --image docker.io/rancher/k3s:${{matrix.k3s_version}}
       -
