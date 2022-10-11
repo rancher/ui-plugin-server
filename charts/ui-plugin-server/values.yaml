@@ -14,7 +14,7 @@ fullnameOverride: ""
 pluginServer:
   image:
     repository: rancher/ui-plugin-server
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     # Overrides the image tag whose default is the chart appVersion.
     tag: "0.1.0"
   service:

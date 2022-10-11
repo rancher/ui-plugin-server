@@ -30,8 +30,6 @@ jobs:
       matrix:
         k3s_version:
           # k3d version list k3s | sed 's/+/-/' | sort -h
-          - v1.24.1-k3s1
-          - v1.22.10-k3s1
           - v1.20.15-k3s1
     steps:
       -
@@ -48,7 +46,7 @@ jobs:
         with:
           cluster-name: "k3s-default"
           args: >-
-            --agents 3
+            --agents 1
             --network "nw01"
             --image docker.io/rancher/k3s:${{matrix.k3s_version}}
       -
@@ -63,6 +61,13 @@ jobs:
         with:
           limit-access-to-actor: true
       -
-        name: Run helm install --dry-run
+        name: Run helm install without UI Plugin CR using locally built k3d image
         run: |
-          helm install --dry-run -n cattle-ui-plugin-system ui-plugin-server --set pluginServer.image.tag=dev --set plugin.enabled=false ./charts/ui-plugin-server/
+          helm install --create-namespace -n cattle-ui-plugin-system ui-plugin-server --set pluginServer.image.tag=dev --set plugin.enabled=false ./charts/ui-plugin-server/;
+          if ! kubectl -n cattle-ui-plugin-system rollout status deployment ui-plugin-server --timeout=10s; then kubectl get pods -n cattle-ui-plugin-system -o yaml; exit 1; fi
+      -
+        name: Start kubectl proxy and check if endpoint is up
+        run: |
+          kubectl proxy &
+          sleep 2
+          curl -sLf http://localhost:8001/api/v1/namespaces/cattle-ui-plugin-system/services/http:ui-plugin-server:80/proxy/files.txt
